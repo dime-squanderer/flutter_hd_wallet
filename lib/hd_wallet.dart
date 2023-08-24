@@ -1,7 +1,3 @@
-library hd_wallet;
+library hdwallet;
 
-/// A Calculator.
-class Calculator {
-  /// Returns [value] plus 1.
-  int addOne(int value) => value + 1;
-}
+export 'src/hd_wallet_base.dart';

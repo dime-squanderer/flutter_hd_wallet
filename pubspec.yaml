@@ -10,6 +10,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  unorm_dart: ^0.2.0
+  crypto: ^3.0.3
+  hex: ^0.2.0
+  pointycastle: ^3.7.3
 
 dev_dependencies:
   flutter_test:
