@@ -48,6 +48,10 @@ String _entropyChecksumBits(Uint8List entropy) {
 
 List<String> entropyToMnemonic(String entropyString,
     {Language language = Language.english}) {
+  // check if entropy is hex string
+  if (!RegExp(r'^[0-9a-fA-F]+$').hasMatch(entropyString)) {
+    throw ArgumentError(_invalidEntropy);
+  }
   final entropy = Uint8List.fromList(HEX.decode(entropyString));
   if (entropy.length < 16) {
     throw ArgumentError(_invalidEntropy);
@@ -82,21 +86,38 @@ List<String> generateMnemonic(
   return entropyToMnemonic(HEX.encode(entropy), language: language);
 }
 
+List<String> formatMnemonic(var mnemonic) {
+  List<String> words = [];
+
+  if (mnemonic is String) {
+    var sentence = mnemonic.replaceAll(RegExp(r'[\s+,，]'), ' ');
+    sentence = sentence.trim();
+    sentence = sentence.toLowerCase();
+    words = sentence.split(RegExp(r'\s+'));
+  } else if (mnemonic is List<String>) {
+    words = mnemonic;
+  } else {
+    throw ArgumentError(_invalidMnemonic);
+  }
+  return words;
+}
+
 /// This function is used to check mnemonic list language.
 ///
 /// If the mnemonic list is not in any language, it will return unknown.
 /// If the mnemonic list is in more than one language, it will return unknown.
-Language mnemonicLanguage(List<String> mnemonic) {
+Language mnemonicLanguage(var mnemonic) {
+  final words = formatMnemonic(mnemonic);
   for (final l in Language.values) {
     final list = l.wordlist;
     var matched = 0;
-    for (final m in mnemonic) {
+    for (final m in words) {
       if (!list.contains(m)) {
         break;
       }
       matched++;
     }
-    if (matched == mnemonic.length) {
+    if (matched == words.length) {
       return l;
     }
   }
@@ -111,23 +132,28 @@ String mnemonicToSentence(List<String> mnemonic) {
   return mnemonic.join(language.delimiter);
 }
 
-Uint8List mnemonicToSeed(List<String> mnemonic, {String passphrase = ''}) {
-  final sentence = nfkd(mnemonicToSentence(mnemonic));
+Uint8List mnemonicToSeed(var mnemonic, {String passphrase = ''}) {
+  final words = formatMnemonic(mnemonic);
+  final sentence = nfkd(mnemonicToSentence(words));
   final pbkdf2 = PBKDF2();
   return pbkdf2.process(sentence, passphrase: passphrase);
 }
 
-String mnemonicToSeedHex(List<String> mnemonic, {String passphrase = ""}) {
+String mnemonicToSeedHex(var mnemonic, {String passphrase = ""}) {
   return mnemonicToSeed(mnemonic, passphrase: passphrase).map((byte) {
     return byte.toRadixString(16).padLeft(2, '0');
   }).join('');
 }
 
 /// This function is used to compute entropy from mnemonic.
-Uint8List mnemonicToEntropy(List<String> mnemonic, Language language) {
-  mnemonic = mnemonic.map((word) => nfkd(word)).toList();
+Uint8List mnemonicToEntropy(var mnemonic) {
+  final language = mnemonicLanguage(mnemonic);
+  if (language == Language.unknown) {
+    throw ArgumentError(_invalidMnemonic);
+  }
+  final words = formatMnemonic(mnemonic);
   final list = language.wordlist;
-  final bits = mnemonic.map((word) {
+  final bits = words.map((word) {
     final index = list.indexOf(word);
     if (index == -1) {
       throw ArgumentError(_invalidMnemonic);
@@ -151,24 +177,16 @@ Uint8List mnemonicToEntropy(List<String> mnemonic, Language language) {
   return Uint8List.fromList(entropy);
 }
 
+// entropy to hex
+String entropyToHex(Uint8List entropy) {
+  return HEX.encode(entropy);
+}
+
 bool validateMnemonic(var mnemonic) {
-  List<String> words = [];
-
-  if (mnemonic is String) {
-    var sentence = mnemonic.replaceAll(RegExp(r'[\s+,，]'), ' ');
-    sentence = sentence.trim();
-    sentence = sentence.toLowerCase();
-    words = sentence.split(RegExp(r'\s+'));
-  } else if (mnemonic is List<String>) {
-    words = mnemonic;
-  } else {
-    return false;
-  }
-
-  final language = mnemonicLanguage(words);
+  List<String> words = formatMnemonic(mnemonic);
 
   try {
-    mnemonicToEntropy(words, language);
+    mnemonicToEntropy(words);
   } catch (e) {
     return false;
   }
