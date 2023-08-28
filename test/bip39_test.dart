@@ -21,7 +21,7 @@ void main() {
         if (l == Language.unknown) {
           continue;
         }
-        // default length is 128 bits (12 words),
+        // default strength is 128 bits (12 words),
         // 160(15), 192(18), 224(21), 256(24)
         for (var i = 128; i <= 256; i += 32) {
           final mnemonic = bip39.generateMnemonic(language: l, strength: i);

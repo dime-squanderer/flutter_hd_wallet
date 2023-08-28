@@ -1,6 +1,6 @@
 name: hd_wallet
 description: A basic toolkit for Cryptocurrency wallet in the Dart language. This package is used to generate and manage the Hierarchical Deterministic (HD) Wallet application.
-version: 0.0.1
+version: 0.0.2
 homepage: https://github.com/CrystalNetwork/hd_wallet
 
 environment:
@@ -14,6 +14,7 @@ dependencies:
   crypto: ^3.0.3
   hex: ^0.2.0
   pointycastle: ^3.7.3
+  base_x: ^2.0.1
 
 dev_dependencies:
   flutter_test:

@@ -45,11 +45,33 @@ import 'package:hd_wallet/hd_wallet.dart';
 
 ## Usage
 
-Include short and useful examples for package users. Add longer examples
-to `/example` folder.
+Short and useful examples for package users. Longer examples
+is in `/example` folder.
+
+### Bip39
+
+Generate 24 Japanese words mnemonice:
 
 ```dart
-const like = 'sample';
+// default strength is 128 bits (12 words),
+// 160(15), 192(18), 224(21), 256(24)
+final mnemonic = bip39.generateMnemonic(language: Language.japanese, strength: 256);
+```
+
+### Base58
+
+```dart
+const hex = '00010966776006953D5567439E5E39F86A0D273BEED61967F6';
+final b58 = base58.encodeHex(hex);
+// '16UwLL9Risc3QfPqBUvKofHmBQ7wMtjvM'
+
+final hash = Uint8List.fromList(HEX.decode(hex));
+final b58 = base58.encode(hash);
+// '16UwLL9Risc3QfPqBUvKofHmBQ7wMtjvM'
+
+final decoded = HEX.encode(base58.decode('16UwLL9Risc3QfPqBUvKofHmBQ7wMtjvM'));
+// '00010966776006953D5567439E5E39F86A0D273BEED61967F6'
+// 
 ```
 
 ## Additional information
