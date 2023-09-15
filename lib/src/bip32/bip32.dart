@@ -1,13 +1,12 @@
 import 'dart:typed_data';
+import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
+import 'package:bs58check/bs58check.dart' as bs58check;
 
 import 'crypto.dart';
 import 'ecurve.dart' as ecc;
 import 'wif.dart' as wif;
-import 'dart:convert';
-
-import 'package:bs58check/bs58check.dart' as bs58check;
 
 // forked from:
 // https://github.com/dart-bitcoin/bip32-dart
@@ -28,9 +27,9 @@ class NetworkType {
 
 final _bitcoin = NetworkType(
     wif: 0x80, bip32: Bip32Type(public: 0x0488b21e, private: 0x0488ade4));
-const highestBit = 0x80000000;
-const uint31Max = 2147483647; // 2^31 - 1
-const uint32Max = 4294967295; // 2^32 - 1
+const _highestBit = 0x80000000;
+const _uint31Max = 2147483647; // 2^31 - 1
+const _uint32Max = 4294967295; // 2^32 - 1
 
 /// Checks if you are awesome. Spoiler: you are.
 class BIP32 {
@@ -92,8 +91,8 @@ class BIP32 {
   }
 
   BIP32 derive(int index) {
-    if (index > uint32Max || index < 0) throw ArgumentError("Expected UInt32");
-    final isHardened = index >= highestBit;
+    if (index > _uint32Max || index < 0) throw ArgumentError("Expected UInt32");
+    final isHardened = index >= _highestBit;
     Uint8List data = Uint8List(37);
     if (isHardened) {
       if (isNeutered()) {
@@ -129,8 +128,8 @@ class BIP32 {
   }
 
   BIP32 deriveHardened(int index) {
-    if (index > uint31Max || index < 0) throw ArgumentError("Expected UInt31");
-    return derive(index + highestBit);
+    if (index > _uint31Max || index < 0) throw ArgumentError("Expected UInt31");
+    return derive(index + _highestBit);
   }
 
   BIP32 derivePath(String path) {

@@ -1,3 +1,7 @@
+## 0.0.4
+
+* Update BIP39 class
+
 ## 0.0.3
 
 * Reference implementation of BIP-0032

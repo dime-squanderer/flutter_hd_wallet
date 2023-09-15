@@ -50,12 +50,13 @@ is in `/example` folder.
 
 ### Bip39
 
-Generate 24 Japanese words mnemonice:
+Generate mnemonice:
 
 ```dart
-// default strength is 128 bits (12 words),
-// 160(15), 192(18), 224(21), 256(24)
-final mnemonic = bip39.generateMnemonic(language: Language.japanese, strength: 256);
+// default mnemonic is 12 english words,
+final m = bip39.BIP39();
+debugPrint("words: ${m.mnemonic}");
+debugPrint("seed: ${m.seed}");
 ```
 
 ### Bip32

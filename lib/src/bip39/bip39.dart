@@ -24,6 +24,14 @@ Uint8List _randomBytes(int strength) {
   return bytes;
 }
 
+dynamic _hexToBytes(String hex) {
+  if (hex.runtimeType == Null) {
+    return Null;
+  } else {
+    return Uint8List.fromList(HEX.decode(hex));
+  }
+}
+
 int _binaryToByte(String binary) {
   return int.parse(binary, radix: 2);
 }
@@ -48,20 +56,11 @@ String _entropyChecksumBits(Uint8List entropy) {
 
 List<String> entropyToMnemonic(String entropyString,
     {Language language = Language.english}) {
-  // check if entropy is hex string
-  if (!RegExp(r'^[0-9a-fA-F]+$').hasMatch(entropyString)) {
+  // check if entropy is valid
+  if (validateEntropy(entropyString) == false) {
     throw ArgumentError(_invalidEntropy);
   }
   final entropy = Uint8List.fromList(HEX.decode(entropyString));
-  if (entropy.length < 16) {
-    throw ArgumentError(_invalidEntropy);
-  }
-  if (entropy.length > 32) {
-    throw ArgumentError(_invalidEntropy);
-  }
-  if (entropy.length % 4 != 0) {
-    throw ArgumentError(_invalidEntropy);
-  }
   final entropyBits = _bytesToBinary(entropy);
   final checksumBits = _entropyChecksumBits(entropy);
   final bits = entropyBits + checksumBits;
@@ -182,6 +181,39 @@ String entropyToHex(Uint8List entropy) {
   return HEX.encode(entropy);
 }
 
+int sizeToStrength(int size) {
+  return size * 32 ~/ 3 ~/ 8;
+}
+
+int entropyToStrength(String entropy) {
+  return entropy.length * 8 ~/ 3;
+}
+
+bool validateEntropy(String entropy) {
+  if (entropy.runtimeType == Null) return false;
+  try {
+    // check if entropy is valid
+    if (!RegExp(r'^[0-9a-fA-F]+$').hasMatch(entropy)) {
+      throw ArgumentError(_invalidEntropy);
+    }
+    final entropyBytes = Uint8List.fromList(HEX.decode(entropy));
+    // debugPrint("entropyBytes.length: ${entropyBytes.length}");
+    // debugPrint("entropy.lenth: ${entropy.length}");
+    if (entropyBytes.length < 16) {
+      throw ArgumentError(_invalidEntropy);
+    }
+    if (entropyBytes.length > 32) {
+      throw ArgumentError(_invalidEntropy);
+    }
+    if (entropyBytes.length % 4 != 0) {
+      throw ArgumentError(_invalidEntropy);
+    }
+  } catch (e) {
+    return false;
+  }
+  return true;
+}
+
 bool validateMnemonic(var mnemonic) {
   List<String> words = formatMnemonic(mnemonic);
 
@@ -191,4 +223,49 @@ bool validateMnemonic(var mnemonic) {
     return false;
   }
   return true;
+}
+
+class BIP39 {
+  Language _language = Language.english;
+  Uint8List _entropy;
+  String _passphrase;
+
+  BIP39({
+    language = Language.english,
+    entropy,
+    passphrase = "",
+    count = 12,
+  })  : _language = language,
+        _entropy = (entropy.runtimeType != Null)
+            ? _hexToBytes(entropy)
+            : _randomBytes(sizeToStrength(count)),
+        _passphrase = passphrase;
+
+  List<String> get mnemonic => entropyToMnemonic(entropy, language: _language);
+  String get sentence => mnemonicToSentence(mnemonic);
+  String get seed => mnemonicToSeedHex(mnemonic, passphrase: _passphrase);
+  String get entropy => entropyToHex(_entropy);
+  String get language => _language.name;
+
+  factory BIP39.fromMnemonic(String mnemonic, {String passphrase = ""}) {
+    final language = mnemonicLanguage(mnemonic);
+    final words = formatMnemonic(mnemonic);
+    final entropy = mnemonicToEntropy(words);
+    return BIP39(
+        language: language,
+        entropy: entropyToHex(entropy),
+        passphrase: passphrase);
+  }
+
+  factory BIP39.fromEntropy(String entropy,
+      {Language language = Language.english, String passphrase = ""}) {
+    // check if entropy is valid
+    if (validateEntropy(entropy) == false) {
+      throw ArgumentError(_invalidEntropy);
+    }
+    return BIP39(
+        language: language,
+        entropy: _hexToBytes(entropy),
+        passphrase: passphrase);
+  }
 }
