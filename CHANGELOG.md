@@ -1,3 +1,7 @@
+## 0.0.7
+
+* Update bip44 usage in readme
+
 ## 0.0.6
 
 * Update readme and bip32 test
