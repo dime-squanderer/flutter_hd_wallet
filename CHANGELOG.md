@@ -1,3 +1,7 @@
+## 0.0.6
+
+* Update readme and bip32 test
+
 ## 0.0.5
 
 * Reference implementation of BIP-0044
