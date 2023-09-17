@@ -4,9 +4,9 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:bs58check/bs58check.dart' as bs58check;
 
-import 'crypto.dart';
-import 'ecurve.dart' as ecc;
-import 'wif.dart' as wif;
+import '../utils/crypto.dart';
+import '../utils/ecurve.dart' as ecc;
+import '../utils/wif.dart' as wif;
 
 // forked from:
 // https://github.com/dart-bitcoin/bip32-dart
@@ -133,6 +133,7 @@ class BIP32 {
   }
 
   BIP32 derivePath(String path) {
+    // debugPrint("derivePath: $path");
     final regex = RegExp(r"^(m\/)?(\d+'?\/)*\d+'?$");
     if (!regex.hasMatch(path)) throw ArgumentError("Expected BIP32 Path");
     List<String> splitPath = path.split("/");

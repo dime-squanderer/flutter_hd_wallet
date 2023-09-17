@@ -6,7 +6,7 @@ import 'package:hex/hex.dart';
 import 'package:unorm_dart/unorm_dart.dart';
 
 import 'language.dart';
-import 'pbkdf2.dart';
+import '../utils/pbkdf2.dart';
 
 const int _sizeByte = 256;
 const _invalidMnemonic = 'Invalid mnemonic';
