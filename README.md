@@ -142,6 +142,12 @@ debugPrint(node.privateKeyHex(
 debugPrint(node.publicKeyHex(
           account: account, change: change, index: index, hardened: true));
 // => 03e6859749a3b614748046b820fb3f3496d1116734e3e2acb67bf25f6a91fb6cc9
+
+debugPrint(node.address(index: 1));
+// => 0x2071fC489F9998d8C6674176655F18D73AFa5Aaa
+
+debugPrint(node.address(index: 2, hardened: true));
+// => 0x487d87C2aCC6272Aad9CdF2cCb98cC06a4e989ae
 ```
 
 ## Additional information

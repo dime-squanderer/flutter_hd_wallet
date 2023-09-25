@@ -32,11 +32,6 @@ void main() {
       "03e6dd25138127138140a0af34d214c9f006e2d6d475eed3fac0c2659ff2c1eacf",
     );
 
-    // debugPrint(node.privateKeyHex());
-    // debugPrint(node.publicKeyHex());
-    // debugPrint(node.privateKeyHex(hardened: true));
-    // debugPrint(node.publicKeyHex(hardened: true));
-
     expect(
       node.privateKeyHex(account: account, change: change, index: index),
       "f033d0f338838555d2842a33e21cbf59a49a3537cd494bff7ada534cbc118243",
@@ -58,5 +53,11 @@ void main() {
           account: account, change: change, index: index, hardened: true),
       "03e6859749a3b614748046b820fb3f3496d1116734e3e2acb67bf25f6a91fb6cc9",
     );
+
+    expect(
+        node.address(index: 1), "0x2071fC489F9998d8C6674176655F18D73AFa5Aaa");
+
+    expect(node.address(index: 2, hardened: true),
+        "0x487d87C2aCC6272Aad9CdF2cCb98cC06a4e989ae");
   });
 }

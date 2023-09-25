@@ -47,6 +47,10 @@ class BIP32 {
     return _q!;
   }
 
+  Uint8List get publicKeyUncompressed {
+    return ecc.pointFromScalar(_d!, false)!;
+  }
+
   Uint8List? get privateKey => _d;
   Uint8List get identifier => hash160(publicKey);
   Uint8List get fingerprint => identifier.sublist(0, 4);

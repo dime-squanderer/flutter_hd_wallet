@@ -1,3 +1,7 @@
+## 0.0.8
+
+* Address in bip44
+
 ## 0.0.7
 
 * Update bip44 usage in readme
