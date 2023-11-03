@@ -1,3 +1,7 @@
+## 0.0.9
+
+* Export Language
+
 ## 0.0.8
 
 * Address in bip44
