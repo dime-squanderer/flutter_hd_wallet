@@ -4,8 +4,8 @@ import 'dart:typed_data';
 import 'package:flutter/foundation.dart';
 import 'package:hex/hex.dart';
 
-import '../utils/crypto.dart';
 import '../utils/base58.dart' as base58;
+import '../utils/crypto.dart';
 
 // Ethereum-based address
 String ethAddress(Uint8List pubk, {bool checksum = true}) {
@@ -60,6 +60,20 @@ String btcAddress(Uint8List pubk) {
   final sha256Hash = sha256(pubk);
   final ripemd160Hash = ripemd160(sha256Hash);
   const version = 0x00;
+  final versionByte = Uint8List.fromList([version]);
+  final versionedHash = Uint8List.fromList([...versionByte, ...ripemd160Hash]);
+  final sha256Hash2 = sha256(versionedHash);
+  final checksum = sha256(sha256Hash2).sublist(0, 4);
+  final checksumed = Uint8List.fromList([...versionedHash, ...checksum]);
+  final address = base58.encode(checksumed);
+  return address;
+}
+
+// Bitcoin-based testnet address
+String btcTestnetAddress(Uint8List pubk) {
+  final sha256Hash = sha256(pubk);
+  final ripemd160Hash = ripemd160(sha256Hash);
+  const version = 0x6F;
   final versionByte = Uint8List.fromList([version]);
   final versionedHash = Uint8List.fromList([...versionByte, ...ripemd160Hash]);
   final sha256Hash2 = sha256(versionedHash);

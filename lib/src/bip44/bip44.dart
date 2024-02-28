@@ -1,10 +1,10 @@
 import 'package:flutter/foundation.dart';
+import 'package:hex/hex.dart';
 
+import '../address/address.dart';
 import '../bip32/bip32.dart';
 import '../bip39/bip39.dart';
-import '../address/address.dart';
 import '../utils/coins.dart';
-import 'package:hex/hex.dart';
 
 class BIP44 {
   final int _purpose = 44;
@@ -73,6 +73,10 @@ class BIP44 {
         final pubk = publicKey(
             account: account, change: change, index: index, hardened: hardened);
         return btcAddress(pubk);
+      case '1':
+        final pubk = publicKey(
+            account: account, change: change, index: index, hardened: hardened);
+        return btcTestnetAddress(pubk);
       // default: coin type = 60, ethereum address
       default:
         final pubk = publicKeyUncompressed(
