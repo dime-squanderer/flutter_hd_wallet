@@ -72,11 +72,13 @@ class BIP44 {
       case '0':
         final pubk = publicKey(
             account: account, change: change, index: index, hardened: hardened);
-        return btcAddress(pubk);
+        const version = 0x00;
+        return btcAddress(pubk, version);
       case '1':
         final pubk = publicKey(
             account: account, change: change, index: index, hardened: hardened);
-        return btcTestnetAddress(pubk);
+        const version = 0x6F;
+        return btcAddress(pubk, version);
       // default: coin type = 60, ethereum address
       default:
         final pubk = publicKeyUncompressed(

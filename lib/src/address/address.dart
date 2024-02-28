@@ -56,24 +56,9 @@ String ethChecksum(String address) {
 }
 
 // Bitcoin-based address
-String btcAddress(Uint8List pubk) {
+String btcAddress(Uint8List pubk, int version) {
   final sha256Hash = sha256(pubk);
   final ripemd160Hash = ripemd160(sha256Hash);
-  const version = 0x00;
-  final versionByte = Uint8List.fromList([version]);
-  final versionedHash = Uint8List.fromList([...versionByte, ...ripemd160Hash]);
-  final sha256Hash2 = sha256(versionedHash);
-  final checksum = sha256(sha256Hash2).sublist(0, 4);
-  final checksumed = Uint8List.fromList([...versionedHash, ...checksum]);
-  final address = base58.encode(checksumed);
-  return address;
-}
-
-// Bitcoin-based testnet address
-String btcTestnetAddress(Uint8List pubk) {
-  final sha256Hash = sha256(pubk);
-  final ripemd160Hash = ripemd160(sha256Hash);
-  const version = 0x6F;
   final versionByte = Uint8List.fromList([version]);
   final versionedHash = Uint8List.fromList([...versionByte, ...ripemd160Hash]);
   final sha256Hash2 = sha256(versionedHash);
