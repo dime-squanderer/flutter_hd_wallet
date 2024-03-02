@@ -2,11 +2,10 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter_hd_wallet/src/bip39/bip39.dart';
+import 'package:flutter_hd_wallet/src/bip39/language.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hex/hex.dart';
-
-import 'package:hd_wallet/src/bip39/bip39.dart';
-import 'package:hd_wallet/src/bip39/language.dart';
 
 void main() {
   // import vectors json

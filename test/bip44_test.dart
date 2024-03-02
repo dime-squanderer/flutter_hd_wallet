@@ -1,5 +1,5 @@
+import 'package:flutter_hd_wallet/src/bip44/bip44.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:hd_wallet/src/bip44/bip44.dart';
 
 void main() {
   group('bip44:', () {

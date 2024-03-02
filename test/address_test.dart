@@ -1,11 +1,9 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter_hd_wallet/src/bip44/bip44.dart';
+import 'package:flutter_hd_wallet/src/utils/base58.dart' as base58;
+import 'package:flutter_hd_wallet/src/utils/crypto.dart';
 import 'package:flutter_test/flutter_test.dart';
-
 import 'package:hex/hex.dart';
-
-import 'package:hd_wallet/src/utils/crypto.dart';
-import 'package:hd_wallet/src/utils/base58.dart' as base58;
-import 'package:hd_wallet/src/bip44/bip44.dart';
 
 void main() {
   test("Address", () {

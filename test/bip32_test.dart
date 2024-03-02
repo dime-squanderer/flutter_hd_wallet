@@ -1,9 +1,7 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter_hd_wallet/src/bip32/bip32.dart';
 import 'package:flutter_test/flutter_test.dart';
-
 import 'package:hex/hex.dart';
-
-import 'package:hd_wallet/src/bip32/bip32.dart';
 
 void main() {
   test('test BIP32', () {
