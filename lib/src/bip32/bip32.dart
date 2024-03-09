@@ -1,8 +1,8 @@
-import 'dart:typed_data';
 import 'dart:convert';
+import 'dart:typed_data';
 
-import 'package:flutter/foundation.dart';
 import 'package:bs58check/bs58check.dart' as bs58check;
+import 'package:flutter/foundation.dart';
 
 import '../utils/crypto.dart';
 import '../utils/ecurve.dart' as ecc;
